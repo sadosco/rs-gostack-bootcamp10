@@ -1,0 +1,4 @@
+{
+	"singleQuote"; true, // permitido utilizar aspas simples
+	"trailingComma"; "es5" // principalmente para o uso de vírgula no fim dos arrays
+}
