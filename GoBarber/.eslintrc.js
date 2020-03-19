@@ -3,7 +3,6 @@ module.exports = {
     es6: true,
     node: true,
   },
-  prettier/prettier: "error",
   extends: [ 'airbnb-base', 'prettier'],
   plugins: 'prettier',
   globals: {
@@ -15,6 +14,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    "prettier/prettier": "error",
     "class-methods-use-this": "off",
     "no-param-reassing": "off",
     "camelcase": "off",
