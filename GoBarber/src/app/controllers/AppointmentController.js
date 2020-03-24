@@ -3,7 +3,7 @@ import File from '../models/File';
 import Appointment from '../models/Appointment';
 import Notification from '../schemas/NotificationSchema';
 
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt'
 import * as Yup from 'yup';
 
@@ -89,10 +89,32 @@ class AppointmentController {
       { locale: pt }
     );
 
-    const notification = await Notification.create({
+    Notification.create({
       content: `Novo agendamento para ${user.name} no dia ${formattedData}`,
       user: req.userId
     });
+
+    return res.json(appointment);
+  }
+
+  async delete(req, res) {
+    const appointment = await Appointment.findByPk(req.params.id);
+
+    if (req.userId !== appointment.provider_id)
+      return res.status(401).json({
+        Error: 'To cancel an appointment you need be the owner!'
+      });
+
+    const dateLimit = subHours(appointment.date, 2);
+
+    if (isBefore(dateLimit, new Date()))
+      return res.status(401).json({
+        Error: 'You just can cancel an appointment 2 hours in advance'
+      });
+
+    appointment.canceled_at = new Date();
+
+    appointment.save();
 
     return res.json(appointment);
   }
