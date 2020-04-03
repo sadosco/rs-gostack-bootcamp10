@@ -1,3 +1,12 @@
+import {
+  isAfter,
+  isBefore,
+  setSeconds,
+  setMinutes,
+  setHours,
+  addHours,
+} from 'date-fns';
+
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
@@ -59,6 +68,17 @@ class DeliveryController {
       return res.status(400).json({ Error: 'Delivery not exists!' });
 
     const { productStatus } = req.query;
+
+    const startHours = setSeconds(setMinutes(setHours(new Date(), 8), 0), 0);
+    const endHours = addHours(startHours, 10);
+
+    if (
+      isBefore(addHours(new Date(), 2), startHours) ||
+      isAfter(addHours(new Date(), 2), endHours)
+    )
+      return res.status(401).json({
+        Error: 'You just can withdrawn an product in business hours',
+      });
 
     if (productStatus) delivery.checkProductStatusAndUpdate(productStatus);
 
