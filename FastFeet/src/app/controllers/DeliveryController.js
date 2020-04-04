@@ -9,7 +9,9 @@ import {
 
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
+import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
+import Mail from '../../lib/Mail';
 
 class DeliveryController {
   async index(req, res) {
@@ -56,6 +58,13 @@ class DeliveryController {
       product,
       recipient_id,
       deliveryman_id,
+    });
+
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+
+    await Mail.sendMail({
+      to: `${deliveryman.name} <${deliveryman.email}>`,
+      subject: 'Novo produto disponivel para entrega',
     });
 
     return res.json(delivery);
