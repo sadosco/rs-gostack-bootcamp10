@@ -61,10 +61,23 @@ class DeliveryController {
     });
 
     const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+    const recipient = await Recipient.findByPk(recipient_id);
 
     await Mail.sendMail({
       to: `${deliveryman.name} <${deliveryman.email}>`,
-      subject: 'Novo produto disponivel para entrega',
+      subject: 'Nova entrega cadastrada',
+      template: 'registration',
+      context: {
+        deliveryman: deliveryman.name,
+        product,
+        recipient: recipient.name,
+        address: recipient.address,
+        number: recipient.number,
+        complements: recipient.complements,
+        cep: recipient.cep,
+        state: recipient.state,
+        city: recipient.city,
+      },
     });
 
     return res.json(delivery);
