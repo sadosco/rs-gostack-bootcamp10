@@ -1,7 +1,39 @@
 import Deliveryman from '../models/Deliveryman';
+import Delivery from '../models/Delivery';
+import Recipient from '../models/Recipient';
 
 class DeliverymanController {
   async index(req, res) {
+    const deliveryman_id = req.params.id;
+
+    if (deliveryman_id) {
+      const deliveries = await Delivery.findAll({
+        where: {
+          deliveryman_id,
+          canceled_at: null,
+          start_date: null,
+        },
+        attributes: ['id', 'product', 'recipient_id'],
+        include: [
+          {
+            model: Recipient,
+            as: 'recipient',
+            attributes: [
+              'name',
+              'address',
+              'number',
+              'complements',
+              'state',
+              'city',
+              'cep',
+            ],
+          },
+        ],
+      });
+
+      return res.json(deliveries);
+    }
+
     const deliverymans = await Deliveryman.findAll({
       attributes: ['id', 'name', 'email'],
     });
