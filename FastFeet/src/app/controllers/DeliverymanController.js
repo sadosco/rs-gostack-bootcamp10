@@ -4,12 +4,12 @@ import Recipient from '../models/Recipient';
 
 class DeliverymanController {
   async index(req, res) {
-    const deliveryman_id = req.params.id;
+    const { id } = req.params;
 
-    if (deliveryman_id) {
+    if (id) {
       const deliveries = await Delivery.findAll({
         where: {
-          deliveryman_id,
+          id,
           canceled_at: null,
           start_date: null,
         },
