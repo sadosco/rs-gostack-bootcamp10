@@ -75,12 +75,12 @@ class DeliveryController {
   }
 
   async update(req, res) {
-    const delivery = await Delivery.findByPk(req.params.id);
+    const { id, status } = req.params;
+
+    const delivery = await Delivery.findByPk(id);
 
     if (!delivery)
       return res.status(400).json({ Error: 'Delivery not exists!' });
-
-    const { productStatus } = req.query;
 
     const startHours = setSeconds(setMinutes(setHours(new Date(), 8), 0), 0);
     const endHours = addHours(startHours, 10);
@@ -93,7 +93,7 @@ class DeliveryController {
         Error: 'You just can withdrawn an product in business hours',
       });
 
-    if (productStatus) delivery.checkProductStatusAndUpdate(productStatus);
+    if (status) delivery.checkProductStatusAndUpdate(status);
 
     await delivery.save();
 
