@@ -13,14 +13,24 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
 import DeliveryController from './app/controllers/DeliveryController';
 import DeliveredController from './app/controllers/DeliveredController';
+import WithdrawnController from './app/controllers/WithdrawnController';
+import DeliveriesController from './app/controllers/DeliveriesController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
 
 routes.post('/user', UserController.store);
 routes.post('/session', SessionController.store);
-routes.get('/deliveryman/:id', DeliverymanController.index);
-routes.get('/deliveryman/:id/deliveries', DeliveredController.index);
+
+routes.get('/deliveryman/:id/delivery', DeliveriesController.index);
+routes.put(
+  '/deliveryman/:id/delivery/:delivery_id/withdrawn',
+  WithdrawnController.update
+);
+routes.put(
+  '/deliveryman/:id/delivery/:delivery_id/delivered',
+  DeliveredController.update
+);
 
 routes.use(authMiddlewares);
 
