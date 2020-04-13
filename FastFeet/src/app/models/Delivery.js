@@ -31,16 +31,6 @@ class Delivery extends Model {
       as: 'signature',
     });
   }
-
-  checkProductStatusAndUpdate(status) {
-    if (status === 'withdrawn') {
-      this.start_date = new Date();
-    }
-
-    if (status === 'delivered') {
-      this.end_date = new Date();
-    }
-  }
 }
 
 export default Delivery;
