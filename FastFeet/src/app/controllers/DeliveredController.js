@@ -1,38 +1,20 @@
-import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
-import Recipient from '../models/Recipient';
 
 class DeliveredController {
-  async index(req, res) {
-    const allDelivered = await Delivery.findAll({
+  async update(req, res) {
+    const { id, delivery_id } = req.params;
+
+    const delivery = await Delivery.findByPk(delivery_id, {
       where: {
-        deliveryman_id: req.params.id,
-        start_date: {
-          [Op.not]: null,
-        },
-        end_date: {
-          [Op.not]: null,
-        },
+        deliveryman_id: id,
       },
-      attributes: ['id', 'product', 'start_date', 'end_date'],
-      include: [
-        {
-          model: Recipient,
-          as: 'recipient',
-          attributes: [
-            'name',
-            'address',
-            'number',
-            'complements',
-            'state',
-            'city',
-            'cep',
-          ],
-        },
-      ],
     });
 
-    return res.json(allDelivered);
+    delivery.end_date = new Date();
+
+    await delivery.save();
+
+    return res.json(delivery);
   }
 }
 
