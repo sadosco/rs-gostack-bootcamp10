@@ -2,11 +2,11 @@ import Delivery from '../models/Delivery';
 
 class DeliveredController {
   async update(req, res) {
-    const { id, delivery_id } = req.params;
+    const { id: deliveryman_id, delivery_id } = req.params;
 
     const delivery = await Delivery.findByPk(delivery_id, {
       where: {
-        deliveryman_id: id,
+        deliveryman_id,
       },
     });
 
