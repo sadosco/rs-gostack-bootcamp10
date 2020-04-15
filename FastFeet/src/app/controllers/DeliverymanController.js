@@ -2,11 +2,11 @@ import Deliveryman from '../models/Deliveryman';
 
 class DeliverymanController {
   async index(req, res) {
-    const deliverymans = await Deliveryman.findAll({
+    const deliveryman = await Deliveryman.findAll({
       attributes: ['id', 'name', 'email'],
     });
 
-    return res.json(deliverymans);
+    return res.json(deliveryman);
   }
 
   async store(req, res) {
