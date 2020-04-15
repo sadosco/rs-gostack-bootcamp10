@@ -14,7 +14,7 @@ module.exports = {
       },
       deliveryman_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'deliverymans', key: 'id' },
+        references: { model: 'deliveryman', key: 'id' },
         allowNull: false,
       },
       signature_id: {
