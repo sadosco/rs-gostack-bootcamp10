@@ -4,17 +4,24 @@ class DeliveredController {
   async update(req, res) {
     const { id: deliveryman_id, delivery_id } = req.params;
 
-    const delivery = await Delivery.findByPk(delivery_id, {
-      where: {
-        deliveryman_id,
+    const { signature_id } = req.body;
+
+    const delivery = await Delivery.update(
+      {
+        end_date: new Date(),
+        signature_id,
       },
-    });
+      {
+        where: {
+          id: delivery_id,
+          deliveryman_id,
+        },
+        returning: true,
+        limit: 1,
+      }
+    );
 
-    delivery.end_date = new Date();
-
-    await delivery.save();
-
-    return res.json(delivery);
+    return res.json(delivery[1]);
   }
 }
 
